@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+  <properties>
+    <graphics key="autolayoutconstraints" value="false"/>
+    <graphics key="legendposition" value="281,174"/>
+    <graphics key="legendautolayout" value="false"/>
+    <graphics key="showconstraints" value="true"/>
+    <graphics key="showshortnames" value="false"/>
+    <graphics key="layout" value="vertical"/>
+    <graphics key="showcollapsedconstraints" value="true"/>
+    <graphics key="legendhidden" value="false"/>
+    <graphics key="layoutalgorithm" value="4"/>
+  </properties>
+
+  <struct>
+    <and abstract="true" mandatory="true" name="SecOC-Specification-lines">
+      <graphics key="collapsed" value="false"/>
+
+      <!-- =============================== -->
+      <!-- NEW: Requirements + Threats + Context -->
+      <!-- =============================== -->
+      <and abstract="true" name="AssuranceModel">
+        <graphics key="collapsed" value="false"/>
+
+        <and abstract="true" name="Requirements">
+          <graphics key="collapsed" value="false"/>
+          <feature name="R1_Authentication"/>
+          <feature name="R2_Freshness"/>
+        </and>
+
+        <alt name="ThreatDerivationPolicy">
+          <graphics key="collapsed" value="false"/>
+          <feature name="ThreatsFixedPerVariant"/>
+          <feature name="ThreatsDerivedFromContext"/>
+        </alt>
+
+        <or abstract="true" name="ThreatModel">
+          <graphics key="collapsed" value="false"/>
+          <feature name="T1_Spoofing"/>
+          <feature name="T2_Tampering"/>
+          <feature name="T3_Replay"/>
+          <feature name="T4_FreshnessDesync"/>
+          <feature name="T5_BurstReplayFlooding"/>
+          <feature name="T6_KeyCompromiseImpact"/>
+          <feature name="T7_GatewayCrossDomainReplay"/>
+        </or>
+
+        <alt abstract="true" name="OperationalContext">
+          <graphics key="collapsed" value="false"/>
+          <feature name="Ctx_SingleECU"/>
+          <feature name="Ctx_GatewayedNetwork"/>
+          <feature name="Ctx_HighBusLoad"/>
+        </alt>
+      </and>
+
+      <!-- =============================== -->
+      <!-- ORIGINAL: SecuritySolution -->
+      <!-- =============================== -->
+      <and abstract="true" name="SecuritySolution">
+        <graphics key="collapsed" value="false"/>
+
+        <or abstract="true" name="Security-Context-Configuration">
+          <graphics key="collapsed" value="false"/>
+          <feature name="PerPDUSecurityProfileSelection"/>
+          <feature name="AuthenticationScopeDefinition"/>
+
+          <alt name="FreshnessStrategySelection">
+            <graphics key="collapsed" value="false"/>
+            <feature name="Counter-basedFreshness"/>
+            <feature name="Timestamp-basedFreshness"/>
+            <feature name="Gateway-synchronizedFreshness"/>
+          </alt>
+
+          <feature name="KeyAssignmentPerContext"/>
+          <feature name="AuthenticatorFormatConfiguration"/>
+          <feature name="RetryBehaviorCustomization"/>
+
+          <or name="SecurityLoggingLevel">
+            <graphics key="collapsed" value="false"/>
+            <feature name="None"/>
+            <feature name="ErrorsOnly"/>
+            <feature name="FullAuditing"/>
+          </or>
+
+          <feature name="ReplayProtectionWindowConfiguration"/>
+        </or>
+
+        <and mandatory="true" name="SymmetricAuthentication">
+          <graphics key="collapsed" value="false"/>
+
+          <or name="Configurable-MAC-Algorithm">
+            <graphics key="collapsed" value="false"/>
+            <feature name="CMAC-AES"/>
+            <feature name="HMAC-SHA256"/>
+            <feature name="HMAC-SHA3"/>
+          </or>
+
+          <or name="Freshness-Value-Inclusion">
+            <graphics key="collapsed" value="false"/>
+            <feature name="FreshnessValuePositioning"/>
+            <feature name="FreshnessValueTruncation"/>
+            <feature name="FreshnessValueEncryption"/>
+            <feature name="IncludeFreshnessValueInAuthenticator"/>
+            <feature name="MultipleFreshnessValueSupport"/>
+            <feature name="FreshnessSynchronizationMechanism"/>
+            <feature name="TimeToLiveValidation"/>
+            <feature name="ReplayAttackDetectionThreshold"/>
+          </or>
+        </and>
+
+        <and mandatory="true" name="AsymmetricAuthentication">
+          <graphics key="collapsed" value="false"/>
+
+          <or name="SignatureGeneration">
+            <alt name="SelectableSignatureAlgorithm">
+              <feature name="RSA-PSS"/>
+              <feature name="ECDSA"/>
+              <feature name="EdDSA"/>
+            </alt>
+            <alt name="HashAlgorithmSelection">
+              <feature name="SHA-256"/>
+              <feature name="SHA-384"/>
+              <feature name="SHA-512"/>
+            </alt>
+            <alt name="SignatureSizeConfiguration">
+              <feature name="ECDSA-256"/>
+              <feature name="RSA-2048"/>
+            </alt>
+            <alt name="KeyLengthSelection">
+              <feature name="RSA-1024"/>
+              <feature name="RSA-4096"/>
+              <feature name="ECC-256"/>
+              <feature name="ECC-384"/>
+            </alt>
+            <feature name="HardwareSecurityModuleOffload"/>
+            <feature name="ECUIdentityBinding"/>
+            <feature name="NonceOrChallengeResponseMode"/>
+            <feature name="SignatureTimestampInclusion"/>
+            <feature name="SignatureExpiryConfiguration"/>
+          </or>
+
+          <or name="SignatureVerification">
+            <feature name="DualSignatureSupport"/>
+            <feature name="SignatureGraceWindow"/>
+            <feature name="TrustedCertificateStore"/>
+            <or name="PolicyBasedTrustDecisionEngine">
+              <feature name="ECUIdentity"/>
+              <feature name="Role-basedAccess"/>
+              <feature name="VehicleMode"/>
+            </or>
+            <feature name="SignatureFreshnessEnforcement"/>
+            <feature name="VerificationRetryPolicy"/>
+            <feature name="DigestAlgorithmPolicy"/>
+            <feature name="SignatureFormatCompatibility"/>
+            <feature name="LoggingAndForensicMode"/>
+            <feature name="AnomalyDetectionIntegration"/>
+            <feature name="SignatureFormatAutoDetection"/>
+            <feature name="SelectiveFieldValidation"/>
+            <feature name="CrossECUSignatureCorrelation"/>
+          </or>
+        </and>
+
+        <and mandatory="true" name="SecuredIPDU">
+          <graphics key="collapsed" value="false"/>
+          <or name="Authenticator">
+            <feature name="AuthenticatorLengthConfiguration"/>
+            <feature name="AuthenticatorRedundancy"/>
+            <feature name="AuthenticatorCompression"/>
+            <or name="AuthenticatorScopeDefinition">
+              <feature name="FullPayload"/>
+              <feature name="PartialPayload"/>
+              <feature name="MetadataFields"/>
+            </or>
+            <alt name="DynamicAuthenticatorInclusion">
+              <graphics key="collapsed" value="false"/>
+              <feature name="Enabled-in-driveMode"/>
+              <feature name="Disabled-in-serviceMode"/>
+            </alt>
+          </or>
+          <feature name="AuthenticIPDUPayload"/>
+        </and>
+
+        <and name="MetadataAuthentication">
+          <feature name="Signal-IDs"/>
+          <feature name="Routing-info"/>
+        </and>
+      </and>
+
+      <!-- ORIGINAL -->
+      <and abstract="true" name="PduRIntegration">
+        <graphics key="collapsed" value="false"/>
+        <feature name="RoutingIncomingIPDUs"/>
+        <feature name="RoutingOutgoingIPDUs"/>
+        <feature name="TransportProtocolSupport"/>
+        <feature name="MulticastSupport"/>
+        <feature name="GatewaySupport"/>
+      </and>
+
+      <and abstract="true" name="Initialization">
+        <graphics key="collapsed" value="false"/>
+        <feature name="BswSchedulerIntegration"/>
+        <feature name="FreshnessManagerInitialization"/>
+        <feature name="KeyAssociation"/>
+      </and>
+
+      <and abstract="true" name="AuthenticationOfOutgoingPDUs">
+        <graphics key="collapsed" value="false"/>
+        <feature name="DirectTransmission"/>
+        <feature name="TriggeredTransmission"/>
+        <feature name="TransportProtocolTransmission"/>
+        <feature name="ErrorHandlingCancellation"/>
+      </and>
+
+      <and abstract="true" name="VerificationOfIncomingPDUs">
+        <graphics key="collapsed" value="false"/>
+        <feature name="DirectReception"/>
+        <feature name="TransportProtocolReception"/>
+        <feature name="SkippingAuthentication"/>
+        <feature name="ReceptionErrorHandling"/>
+      </and>
+
+      <and abstract="true" name="GatewayFunctionality">
+        <graphics key="collapsed" value="false"/>
+        <feature name="ReAuthentication"/>
+        <feature name="FreshnessUpdate"/>
+        <feature name="AuthenticatorRegeneration"/>
+      </and>
+
+      <and abstract="true" name="ErrorHandling">
+        <graphics key="collapsed" value="false"/>
+        <and name="ErrorClassification">
+          <graphics key="collapsed" value="false"/>
+          <feature name="DevelopmentErrors"/>
+          <feature name="RuntimeErrors"/>
+          <feature name="TransientFaults"/>
+          <feature name="ProductionErrors"/>
+          <feature name="ExtendedProductionErrors"/>
+        </and>
+        <feature name="ErrorDetection"/>
+        <feature name="ErrorNotification"/>
+      </and>
+
+      <!-- UPDATED: profiles contain versions -->
+      <or name="SecurityProfiles">
+        <graphics key="collapsed" value="false"/>
+
+        <and name="SecOCProfile1">
+          <alt name="SecOCProfile1_Version">
+            <feature name="P1_V1"/>
+            <feature name="P1_V2"/>
+            <feature name="P1_V3"/>
+          </alt>
+        </and>
+
+        <and name="SecOCProfile2">
+          <alt name="SecOCProfile2_Version">
+            <feature name="P2_V1"/>
+            <feature name="P2_V2"/>
+            <feature name="P2_V3"/>
+          </alt>
+        </and>
+
+        <and name="SecOCProfile3">
+          <alt name="SecOCProfile3_Version">
+            <feature name="P3_V1"/>
+            <feature name="P3_V2"/>
+            <feature name="P3_V3"/>
+          </alt>
+        </and>
+      </or>
+
+    </and>
+  </struct>
+
+  <!-- ===================================================== -->
+  <!-- FeatureIDE constraint syntax: plain propositional text -->
+  <!-- ===================================================== -->
+  <constraints>
+
+    <!-- Context only when ThreatsDerivedFromContext -->
+    <rule> ThreatsDerivedFromContext -> (Ctx_SingleECU | Ctx_GatewayedNetwork | Ctx_HighBusLoad) </rule>
+
+    <!-- If threats fixed per variant, no context selected -->
+    <rule> ThreatsFixedPerVariant -> !(Ctx_SingleECU | Ctx_GatewayedNetwork | Ctx_HighBusLoad) </rule>
+
+    <!-- Context -> derived threats -->
+    <rule> Ctx_GatewayedNetwork -> T7_GatewayCrossDomainReplay </rule>
+    <rule> Ctx_HighBusLoad -> T5_BurstReplayFlooding </rule>
+    <rule> Ctx_SingleECU -> T3_Replay </rule>
+
+    <!-- Derived-from-context baseline threats -->
+    <rule> ThreatsDerivedFromContext -> (T1_Spoofing & T2_Tampering) </rule>
+
+    <!-- Threats -> Requirements -->
+    <rule> (T1_Spoofing | T2_Tampering) -> R1_Authentication </rule>
+    <rule> (T3_Replay | T4_FreshnessDesync | T5_BurstReplayFlooding | T7_GatewayCrossDomainReplay) -> R2_Freshness </rule>
+
+    <!-- Requirements -> Mechanisms -->
+    <rule> R1_Authentication -> (CMAC-AES | HMAC-SHA256 | HMAC-SHA3) </rule>
+    <rule> R2_Freshness -> ((Counter-basedFreshness | Timestamp-basedFreshness | Gateway-synchronizedFreshness) & ReplayProtectionWindowConfiguration) </rule>
+
+    <!-- Strategy-specific implications -->
+    <rule> Timestamp-basedFreshness -> TimeToLiveValidation </rule>
+    <rule> Gateway-synchronizedFreshness -> FreshnessSynchronizationMechanism </rule>
+
+    <!-- ============================ -->
+    <!-- Fixed-per-variant: Version -> Threat bundle -->
+    <!-- (examples replicated for P1/P2/P3) -->
+    <!-- ============================ -->
+
+    <!-- Profile 1 -->
+    <rule> P1_V1 -> (T1_Spoofing & T2_Tampering & T3_Replay) </rule>
+    <rule> P1_V2 -> (T1_Spoofing & T2_Tampering & T3_Replay & T5_BurstReplayFlooding) </rule>
+    <rule> P1_V3 -> (T1_Spoofing & T2_Tampering & T3_Replay & T4_FreshnessDesync & T5_BurstReplayFlooding & T7_GatewayCrossDomainReplay) </rule>
+
+    <!-- Profile 2 -->
+    <rule> P2_V1 -> (T1_Spoofing & T2_Tampering & T3_Replay) </rule>
+    <rule> P2_V2 -> (T1_Spoofing & T2_Tampering & T3_Replay & T5_BurstReplayFlooding) </rule>
+    <rule> P2_V3 -> (T1_Spoofing & T2_Tampering & T3_Replay & T4_FreshnessDesync & T5_BurstReplayFlooding & T7_GatewayCrossDomainReplay) </rule>
+
+    <!-- Profile 3 -->
+    <rule> P3_V1 -> (T1_Spoofing & T2_Tampering & T3_Replay) </rule>
+    <rule> P3_V2 -> (T1_Spoofing & T2_Tampering & T3_Replay & T5_BurstReplayFlooding) </rule>
+    <rule> P3_V3 -> (T1_Spoofing & T2_Tampering & T3_Replay & T4_FreshnessDesync & T5_BurstReplayFlooding & T7_GatewayCrossDomainReplay) </rule>
+
+    <!-- If any version is selected, enforce ThreatsFixedPerVariant policy -->
+    <rule>
+      (P1_V1 | P1_V2 | P1_V3 | P2_V1 | P2_V2 | P2_V3 | P3_V1 | P3_V2 | P3_V3) -> ThreatsFixedPerVariant
+    </rule>
+
+  </constraints>
+</featureModel>
