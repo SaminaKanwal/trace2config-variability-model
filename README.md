@@ -1,1 +1,1 @@
-# trace2config-verification-model
+# trace2config-variability-model
